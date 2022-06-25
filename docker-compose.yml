@@ -28,9 +28,10 @@ services:
     image: mongo:5.0
     container_name: mongodatabase
     ports:
-      - 27017:27017
+      - '27017-27019:27017-27019'
     volumes:
-      - mongo:/data/db
+      - ./mongo-volume:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=example
@@ -39,4 +40,3 @@ services:
 volumes:
   caddy_data:
   caddy_config:
-  mongo:
