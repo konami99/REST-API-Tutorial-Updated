@@ -6,7 +6,9 @@ services:
     environment:
       - NODE_ENV=production
     build:
-        context: ./ 
+      context: ./ 
+    depends_on:
+      - "mongodatabase"
 
   caddy:
     image: caddy/caddy:2.2.1-alpine
@@ -16,11 +18,23 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-    - $PWD/Caddyfile:/etc/caddy/Caddyfile
-    - $PWD/site:/srv
-    - caddy_data:/data
-    - caddy_config:/config
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
+  mongodatabase:
+    image: mongo:5.0
+    container_name: mongodatabase
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+      - MONGO_INITDB_DATABASE=rest-api-tutorial
 
 volumes:
   caddy_data:
   caddy_config:
+  mongo:
